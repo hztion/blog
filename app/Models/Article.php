@@ -90,17 +90,6 @@ class Article extends Base
         return $data;
     }
 
-    public function getAdminList()
-    {
-        $data = $this
-            ->select('articles.*', 'c.name as category_name')
-            ->join('categories as c', 'articles.category_id', 'c.id')
-            ->orderBy('created_at', 'desc')
-            ->withTrashed()
-            ->paginate(15);
-        return $data;
-    }
-
     /**
      * 获取前台文章列表
      *
