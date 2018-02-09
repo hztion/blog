@@ -1,12 +1,12 @@
 {
-    "name": "baijunyao/laravel-bjyblog",
+    "name": "hztion/blog",
     "description": "Laravel blog.",
-    "keywords": ["framework", "laravel", "bjyblog"],
+    "keywords": ["framework", "laravel", "blog"],
     "authors": [
         {
-            "name": "baijunyao",
-            "email": "baijunyao@baijunyao.com",
-            "homepage": "http://baijunyao.com",
+            "name": "hztion",
+            "email": "hz_xuan@qq.com",
+            "homepage": "http://hztion.com",
             "role": "Developer"
         }
     ],
