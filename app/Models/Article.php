@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+
 class Article extends Base
 {
     /**
@@ -24,6 +26,8 @@ class Article extends Base
         $data['html'] = markdown_to_html($data['markdown']);
         $tag_ids = $data['tag_ids'];
         unset($data['tag_ids']);
+        // 给定一个默认的click
+        $data['click'] = mt_rand(10, 25);
 
         //添加数据
         $result=$this
@@ -228,4 +232,18 @@ class Article extends Base
         return $data;
     }
     
+    /**
+     * 获取文章updated_at人性化时间
+     *
+     * @return  mixed
+     */
+    public function getUpdatedAtAttribute($date)
+    {
+        if (Carbon::now() < Carbon::parse($date)->addDays(10)) {
+            return Carbon::parse($date);
+        }
+
+        return Carbon::parse($date)->diffForHumans();
+    }
+
 }

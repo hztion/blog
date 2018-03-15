@@ -72,7 +72,7 @@ function comment(obj){
                         'email':email
                     };
                 // 显示loading
-                layer.load(1);
+                layer.load(2);
                 // ajax评论
                 $.post(ajaxCommentUrl, postData, function(data) {
                     var newPid=data.id;
@@ -98,7 +98,7 @@ function comment(obj){
                 });
             }
         }else{
-            $('#b-modal-login').modal('show');
+            $('#globalLogin').modal('show');
         }
     });
 }

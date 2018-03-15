@@ -113,6 +113,9 @@ class AppServiceProvider extends ServiceProvider
             $view->with($assign);
 
         });
+
+        // 人性化时间
+        \Carbon\Carbon::setLocale('zh');
     }
 
     /**

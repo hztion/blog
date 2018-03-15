@@ -62,11 +62,22 @@ class IndexController extends Controller
         // 去掉描述中的换行
         $data->description = str_replace(["\r", "\n", "\r\n"], '', $data->description);
         // 同一个用户访问同一篇文章每天只增加1个访问量  使用 ip+id 作为 key 判别
-        $ipAndId = 'articleRequestList'.$request->ip().':'.$id;
-        if (!Cache::has($ipAndId)) {
-            cache([$ipAndId => ''], 1440);
-            // 文章点击量+1
-            $data->increment('click');
+        // $ipAndId = 'articleRequestList'.$request->ip().':'.$id;
+        // if (!Cache::has($ipAndId)) {
+        //     cache([$ipAndId => ''], 1440);
+        //     // 文章点击量+1
+        //     $data->increment('click');
+        // }
+        
+        // 每刷新一次就增加访问，储存在缓存中
+        Cache::add('click', 0, true);
+        Cache::increment('click');
+        $click = Cache::get('click');
+        // 当超过20次再更新
+        if ($click > 20) {
+            Cache::put('click', 0, true);
+            $data->timestamps = false;
+            $data->increment('click', $click);
         }
 
         // 获取上一篇

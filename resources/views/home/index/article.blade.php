@@ -6,6 +6,10 @@
 
 @section('description', $data->description)
 
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/home/comment.css') }}">
+@endsection
+
 @section('content')
     <header class="content-header post-header">
         <div class="container fade-scale in">
@@ -37,7 +41,7 @@
                     </ul>
 
                     <span id="busuanzi_container_page_pv" title="文章总阅读量" style="display: inline;">
-                        <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+                        <i class="icon icon-eye icon-pr"></i><span _id="busuanzi_value_page_pv">{{ $data->click }}</span>
                     </span>
                 </div>
 
@@ -128,6 +132,83 @@
                 </div>
             </nav>
         </article>
+        <!-- 引入通用评论开始 -->
+        <script>
+            var userEmail='{{ session('user.email') }}';
+            tuzkiNumber=1;
+        </script>
+        <div id="b-content">
+            <div class="b-comment">
+                <div class="b-comment-box">
+                    <img class="b-head-img" src="@if(empty(session('user.avatar'))){{ asset('images/home/default_head_img.gif') }}@else{{ session('user.avatar') }}@endif" alt="{{ $config['WEB_NAME'] }}" title="{{ $config['WEB_NAME'] }}">
+                    <div class="b-box-textarea">
+                        <div class="b-box-content" @if(session()->has('user'))contenteditable="true" @endif onfocus="delete_hint(this)" onchange="changeWord(this)">请先登录后发表评论</div>
+                        <ul class="b-emote-submit">
+                            <li class="b-emote">
+                                <i class="fa fa-smile-o" onclick="getTuzki(this)"></i>
+                                <input class="form-control b-email" type="text" name="email" placeholder="接收回复的email地址" value="{{ session('user.email') }}">
+                                <div class="b-tuzki">
+
+                                </div>
+                            </li>
+                            <li class="b-submit-button">
+                                <input type="button" value="评 论" aid="{{ request()->id }}" pid="0" onclick="comment(this)">
+                            </li>
+                            <li class="b-clear-float"></li>
+                        </ul>
+                    </div>
+                    <div class="b-clear-float"></div>
+                </div>
+                <div class="b-comment-title">
+                    <ul class="b-title-ul">
+                        <li class="b-title-li" style="visibility:hidden;">最新回复</li>
+                        <li class="b-title-li text-right">总共<span>{{ count($comment) }}</span>条评论</li>
+                    </ul>
+                </div>
+                <div class="b-user-comment">
+                @foreach($comment as $k => $v)
+                    <div id="comment-{{ $v['id'] }}" class="b-user b-parent">
+                        <div class="b-pic-col">
+                            <img class="b-user-pic js-head-img" src="{{ asset('uploads/avatar/default.jpg') }}" _src="{{ asset($v['avatar']) }}" alt="{{ $config['WEB_NAME'] }}" title="{{ $config['WEB_NAME'] }}">
+                        </div>
+                        <div class="b-content-col b-cc-first">
+                            <p class="b-content">
+                                <span class="b-user-name">{{ $v['name'] }}</span>：{!! $v['content'] !!}
+                            </p>
+                            <p class="b-date">
+                                {{ $v['created_at'] }} <a href="javascript:;" aid="{{ request()->id }}" pid="{{ $v['id'] }}" username="{{ $v['name'] }}" onclick="reply(this)">回复</a>
+                            </p>
+                            @foreach($v['child'] as $m => $n)
+                                <div id="comment-{{ $n['id'] }}" class="b-user b-child">
+                                    <div class="b-pic-col">
+                                        <img class="b-user-pic js-head-img" src="{{ asset('uploads/avatar/default.jpg') }}" _src="{{ asset($n['avatar']) }}" alt="{{ $config['WEB_NAME'] }}" title="{{ $config['WEB_NAME'] }}">
+                                    </div>
+                                    <ul class="b-content-col">
+                                        <li class="b-content">
+                                            <span class="b-reply-name">{{ $n['name'] }}</span>
+                                            <span class="b-reply">回复</span>
+                                            <span class="b-user-name">{{ $n['reply_name'] }}</span>：{!! $n['content'] !!}
+                                        </li>
+                                        <li class="b-date">
+                                            {{ $n['created_at'] }} <a href="javascript:;" aid="{{ request()->id }}" pid="{{ $n['id'] }}" username="{{ $n['reply_name'] }}" onclick="reply(this)">回复</a>
+                                        </li>
+                                        <li class="b-clear-float"></li>
+                                    </ul>
+                                </div>
+                            @endforeach
+                            <div class="b-clear-float"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="b-border"></div>
+                        </div>
+                    </div>
+                @endforeach
+                </div>
+            </div>
+        </div>
+        <!-- 引入通用评论结束 -->
     </div>
 @endsection
 

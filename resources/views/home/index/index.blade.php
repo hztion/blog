@@ -29,7 +29,7 @@
                                 </li>
                             </ul>
                         </div>
-                        
+
                         <h3 class="post-title" itemprop="name">
                           <a class="post-title-link" href="{{ url('article', $v->id) }}">{{ $v->title }}</a>
                         </h3>

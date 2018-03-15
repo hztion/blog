@@ -101,10 +101,24 @@
                     <i class="icon icon-lg icon-search"></i>
                 </a>
             </div>
-
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare" style="display:none;">
                 <i class="icon icon-lg icon-share-alt"></i>
             </a>
+
+            @if(empty(session('user.name')))
+                <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuLogin">
+                    <i class="icon icon-lg icon-sign-in"></i>
+                </a>
+            @else
+                <div class="user-info" id="menuLogin">
+                    <span class="waves-effect"><img class="head-img" src="{{ session('user.avatar') }}" alt="{{ session('user.name') }}" title="{{ session('user.name') }}"  /></span>
+                    <span class="waves-effect">{{ session('user.name') }}</span>
+                    <a href="{{ url('auth/oauth/logout') }}" class="header-icon waves-effect waves-circle waves-light">
+                        <i class="icon icon-lg icon-sign-out"></i>
+                    </a>
+                </div>
+            @endif
         </div>
     </header>
 
@@ -198,6 +212,29 @@
 <template id="search-tpl"></template>
 <!-- 分享搜索结束 -->
 
+<!-- 登录模态框开始 -->
+<div class="global-share" id="globalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-title">———&emsp;登录方式&emsp;———</div>
+    <ul class="reset share-icons">
+        <li class=" waves-effect waves-block">
+            <a class="qq share-sns" href="{{ url('auth/oauth/redirectToProvider/qq') }}" alt="QQ登录" data-title="QQ">
+                <i class="icon icon-qq"></i>
+            </a>
+        </li>
+        <li class=" waves-effect waves-block">
+            <a class="weibo share-sns" href="{{ url('auth/oauth/redirectToProvider/weibo') }}" alt="微博登录" data-title="微博">
+                <i class="icon icon-weibo"></i>
+            </a>
+        </li>
+        <li class=" waves-effect waves-block">
+            <a class="github share-sns" href="{{ url('auth/oauth/redirectToProvider/github') }}" alt="github登录" data-title="github">
+                <i class="icon icon-github"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+<!-- 登录模态框结束 -->
+
 <!-- 点击特效开始 -->
 <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 99999999; pointer-events: none; width: 1600px; height: 481px;" width="3200" height="962">
 </canvas>
@@ -205,7 +242,7 @@
 
 <script src="{{ asset('statics/js/jquery-2.0.0.min.js') }}"></script>
 <script>
-    var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+    var BLOG = { ROOT: '/', SHARE: true, REWARD: false, LOGIN: true };
 
     logoutUrl="{:U('Home/User/logout')}";
     $.ajaxSetup({
